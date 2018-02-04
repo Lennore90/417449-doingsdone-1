@@ -47,15 +47,11 @@ $tasks=[
 function task_count($task_array, $project_name,$show_complete_tasks) {
     $count=0;
     foreach ($task_array as $task){
-        if ($show_complete_tasks==1){
+        if ($show_complete_tasks==1||$task['is_done']==false){
             if ($task['project']==$project_name||$project_name=='Все'){
                 $count++;
             }
 
-        }else{
-            if (($project_name=='Все'||$task['project']==$project_name)&&$task['is_done']==false){
-                $count++;
-            }
         }
     }
     return $count; 
