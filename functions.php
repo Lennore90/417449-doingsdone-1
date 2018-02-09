@@ -1,6 +1,6 @@
 <?php
 
-function task_count ($task_array, $project_name, $show_complete_tasks)
+function task_count($task_array, $project_name, $show_complete_tasks)
 {
     $count=0;
     
@@ -15,12 +15,12 @@ function task_count ($task_array, $project_name, $show_complete_tasks)
     return $count; 
 }
 
-function render_template ($template_path, $template_vars)
+function render_template($template_path, $template_vars)
 {
     if (file_exists ($template_path)) {
         ob_start();
-        extract ($template_vars);
-        require_once ($template_path);
+        extract($template_vars);
+        require_once($template_path);
         $result = ob_get_clean ();
     } else {
         $result = null;
