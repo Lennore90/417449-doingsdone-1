@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?=$page_title?></title>
+    <title> <?=$page_title?> </title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="user-menu__data">
-                        <p><?=$userName?></p>
+                        <p> <?=$userName?> </p>
 
                         <a href="#">Выйти</a>
                     </div>
@@ -42,10 +42,10 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <? foreach($project_list as $category): ?>
-                            <li class="main-navigation__list-item <?=$category == $project_list[0] ? 'main-navigation__list-item--active' : ''?>">
-                                <a class="main-navigation__list-item-link" href="#"><?=$category?></a>
-                                <span class="main-navigation__list-item-count"><?=task_count($tasks, $category, $show_complete_tasks)?></span>
+                        <? foreach ($project_list as $category): ?>
+                            <li class="main-navigation__list-item <?=$category == $project_list [0] ? 'main-navigation__list-item--active' : ''?>">
+                                <a class="main-navigation__list-item-link" href="#"> <?=$category?> </a>
+                                <span class="main-navigation__list-item-count"> <?=task_count ($tasks, $category, $show_complete_tasks)?> </span>
                             </li>
                         <? endforeach; ?>
                     </ul>
@@ -53,7 +53,7 @@
 
                 <a class="button button--transparent button--plus content__side-button" href="#">Добавить проект</a>
             </section>
-            <main class="content__main"><?=$page_content;?></main>
+            <main class="content__main"> <?=$page_content;?> </main>
         </div>
     </div>
 </div>

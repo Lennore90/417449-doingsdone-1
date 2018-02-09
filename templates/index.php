@@ -27,15 +27,15 @@
 
 <table class="tasks">
     <? foreach ($tasks as $task):?>
-        <?if ($show_complete_tasks == 1 || $task['is_done'] == false):?>
-            <tr class="tasks__item task task<?=$task['is_done'] === true ? '--completed' : ''?>">
+        <?if ($show_complete_tasks == 1 || $task ['is_done'] == false):?>
+            <tr class="tasks__item task task<?=$task ['is_done'] === true ? '--completed' : ''?>">
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
                         <input class="checkbox__input visually-hidden" type="checkbox" <?=$task['is_done'] === true ? 'checked' : ''?>>
-                        <span class="checkbox__text"><?=($task['title'])?></span>
+                        <span class="checkbox__text"> <?=($task['title'])?> </span>
                     </label>
                 </td>
-                <td class="task__date"><?=$task['deadline']?></td>
+                <td class="task__date"> <?=$task['deadline']?> </td>
 
                 <td class="task__controls">
                 </td>

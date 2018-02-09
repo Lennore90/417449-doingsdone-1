@@ -1,11 +1,12 @@
 <?php
 
-function task_count($task_array, $project_name,$show_complete_tasks) {
+function task_count ($task_array, $project_name, $show_complete_tasks)
+{
     $count=0;
     
-    foreach ($task_array as $task){
-        if ($show_complete_tasks == 1 || $task['is_done'] == false){
-            if ($task['project'] == $project_name || $project_name == 'Все'){
+    foreach ($task_array as $task) {
+        if ($show_complete_tasks == 1 || $task ['is_done'] == false) {
+            if ($task ['project'] == $project_name || $project_name == 'Все') {
                 $count++;
             }
         }
@@ -14,14 +15,15 @@ function task_count($task_array, $project_name,$show_complete_tasks) {
     return $count; 
 }
 
-function renderTemplate($templatePath,$templateVars){
-    if (file_exists($templatePath)){
+function render_template ($template_path, $template_vars)
+{
+    if (file_exists ($template_path)) {
         ob_start();
-        extract($templateVars);
-        require_once($templatePath);
-        $result=ob_get_clean();
-    }else{
-        $result=null;
+        extract ($template_vars);
+        require_once ($template_path);
+        $result = ob_get_clean ();
+    } else {
+        $result = null;
     }
 
     return $result;
