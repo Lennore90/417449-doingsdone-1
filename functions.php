@@ -28,4 +28,15 @@ function render_template($template_path, $template_vars)
 
     return $result;
 }
+
+function time_remains($date)
+{
+    if (!empty($date)) {
+        $result = floor((strtotime($date) - strtotime(today)) / 86400);
+    } else {
+        $result = null;
+    }
+
+    return $result;
+}
 ?>

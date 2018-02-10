@@ -24,8 +24,8 @@
 
 <table class="tasks">
     <? foreach ($tasks as $task):?>
-        <?if ($show_complete_tasks == 1 || $task ['is_done'] == false):?>
-            <tr class="tasks__item task task<?=$task ['is_done'] === true ? '--completed' : ''?>">
+        <?if ($show_complete_tasks == 1 || $task['is_done'] == false):?>
+            <tr class="tasks__item task <?=$task['is_done'] === true ? 'task--completed' : ''?> <?=(!empty($task['deadline']) && time_remains($task['deadline']) <= 1 ) ? 'task--important' :''?>">
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
                         <input class="checkbox__input visually-hidden" type="checkbox" <?=$task['is_done'] === true ? 'checked' : ''?>>

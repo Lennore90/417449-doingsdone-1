@@ -24,7 +24,7 @@ $tasks = [
     ],
     [
         'title' => "Встреча с другом",
-        'deadline' => "22.04.2018",
+        'deadline' => "22.01.2018",
         'project' => "Входящие",
         'is_done' => false,
     ],
