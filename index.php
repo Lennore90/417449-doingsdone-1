@@ -9,6 +9,7 @@ require_once('data.php');
 $content = render_template(
     'templates/index.php',
     [
+        'project_list' => $project_list,
         'tasks' => $tasks ?? [],
         'show_complete_tasks' => $show_complete_tasks,
     ]
@@ -28,4 +29,5 @@ $page_layout = render_template(
 
 print($page_layout);
 
+var_dump($_GET[id]);
 ?>
