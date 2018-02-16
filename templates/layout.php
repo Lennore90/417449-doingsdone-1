@@ -46,7 +46,7 @@
                     	<? $active_project = $_GET['project_id'] ?? 0; ?>
                     	<? foreach ($project_list as $id => $category): ?>
                             <li class="main-navigation__list-item <?=$id == $active_project ? 'main-navigation__list-item--active' : ''?>">
-                                <a class="main-navigation__list-item-link" href="/?project_id=<?=array_search($category, $project_list)?>#<?=$category?>"><?=$category?></a>
+                                <a class="main-navigation__list-item-link" href="/?project_id=<?=$id?>"><?=$category?></a>
                                 <span class="main-navigation__list-item-count"><?=task_count($tasks, $category, $show_complete_tasks)?></span>
                             </li>
                         <? endforeach; ?>
