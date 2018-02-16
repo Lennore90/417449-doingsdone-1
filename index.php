@@ -6,10 +6,21 @@ $show_complete_tasks = rand(0, 1);
 require_once('functions.php');
 require_once('data.php');
 
+$tasks_to_show = $tasks;
+
+if (!empty($_GET['project_id'])) {
+    if (array_key_exists($_GET['project_id'], $project_list)) {
+        $tasks_to_show = tasks_by_project($tasks, $project_list[$_GET['project_id']]);
+    } else {
+        http_response_code(404);
+    }
+}
+
 $content = render_template(
     'templates/index.php',
     [
-        'tasks' => $tasks ?? [],
+        'project_list' => $project_list,
+        'tasks' => $tasks_to_show ?? [],
         'show_complete_tasks' => $show_complete_tasks,
     ]
 );

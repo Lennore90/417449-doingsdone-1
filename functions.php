@@ -39,4 +39,18 @@ function time_remains($date)
 
     return $result;
 }
+
+function tasks_by_project($task_list, $project_name)
+{
+    $result = [];
+    foreach ($task_list as $task) {
+        if ($task['project'] == $project_name) {
+            $result[] = $task;
+        }
+
+    }
+
+    return $result;
+}
+
 ?>
