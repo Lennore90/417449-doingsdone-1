@@ -24,26 +24,19 @@
 
 <table class="tasks">
     <? foreach ($tasks as $task):?>
-        <? $index = $_GET['id'] ?? null; ?>
-        <? if (empty($_GET['id']) || isset($project_list[$index])): ?>
-            <? if ($index == (0 || null) || $task['project'] == $project_list[$index]) :?>
-                <? if ($show_complete_tasks == 1 || $task['is_done'] == false):?>
-                    <tr class="tasks__item task <?=$task['is_done'] === true ? 'task--completed' : ''?> <?=(!empty($task['deadline']) && $task['is_done'] == false && time_remains($task['deadline']) <= 1 ) ? 'task--important' :''?>">
-                        <td class="task__select">
-                            <label class="checkbox task__checkbox">
-                                <input class="checkbox__input visually-hidden" type="checkbox" <?=$task['is_done'] === true ? 'checked' : ''?>>
-                                <span class="checkbox__text"><?=($task['title'])?></span>
-                            </label>
-                        </td>
-                        <td class="task__date"><?=$task['deadline']?></td>
+        <? if ($show_complete_tasks == 1 || $task['is_done'] == false):?>
+            <tr class="tasks__item task <?=$task['is_done'] === true ? 'task--completed' : ''?> <?=(!empty($task['deadline']) && $task['is_done'] == false && time_remains($task['deadline']) <= 1 ) ? 'task--important' :''?>">
+                <td class="task__select">
+                    <label class="checkbox task__checkbox">
+                        <input class="checkbox__input visually-hidden" type="checkbox" <?=$task['is_done'] === true ? 'checked' : ''?>>
+                        <span class="checkbox__text"><?=($task['title'])?></span>
+                    </label>
+                </td>
+                <td class="task__date"><?=$task['deadline']?></td>
 
-                        <td class="task__controls">
-                        </td>
-                    </tr>
-                <? endif; ?>
-            <? endif; ?>
-        <? else:?>
-            <? http_response_code(404);?>
-        <? endif; ?>   
+                <td class="task__controls">
+                </td>
+            </tr>
+        <? endif; ?>      
     <? endforeach; ?>
 </table>

@@ -20,7 +20,7 @@
             </a>
 
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus" href="#">Добавить задачу</a>
+                <a class="main-header__side-item button button--plus" href="/?add">Добавить задачу</a>
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
@@ -42,10 +42,11 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <? foreach ($project_list as $category): ?>
-                        	<? $index = $_GET['id']; ?>
-                            <li class="main-navigation__list-item <?=$category == $project_list[$index] ? 'main-navigation__list-item--active' : ''?>">
-                                <a class="main-navigation__list-item-link" href="/?id=<?=array_search($category, $project_list)?>#<?=$category?>"><?=$category?></a>
+                        
+                    	<? $active_project = $_GET['project_id'] ?? 0; ?>
+                    	<? foreach ($project_list as $id => $category): ?>
+                            <li class="main-navigation__list-item <?=$id == $active_project ? 'main-navigation__list-item--active' : ''?>">
+                                <a class="main-navigation__list-item-link" href="/?project_id=<?=array_search($category, $project_list)?>#<?=$category?>"><?=$category?></a>
                                 <span class="main-navigation__list-item-count"><?=task_count($tasks, $category, $show_complete_tasks)?></span>
                             </li>
                         <? endforeach; ?>
