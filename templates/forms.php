@@ -35,7 +35,7 @@
 
         <div class="form__input-file">
           <input type="hidden" name="MAX_FILE_SIZE" value="30000">
-          <input class="visually-hidden" type="file" name="task_file" id="task_file" value="">
+          <input class="visually-hidden" type="file" name="task_file" enctype="multipart/form-data" id="task_file" value="">
 
           <label class="button button--transparent" for="task_file">
               <span>Выберите файл</span>

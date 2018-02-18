@@ -6,16 +6,6 @@ $show_complete_tasks = rand(0, 1);
 require_once('functions.php');
 require_once('data.php');
 
-$tasks_to_show = $tasks;
-
-if (!empty($_GET['project_id'])) {
-    if (array_key_exists($_GET['project_id'], $project_list)) {
-        $tasks_to_show = tasks_by_project($tasks, $project_list[$_GET['project_id']]);
-    } else {
-        http_response_code(404);
-    }
-}
-
 $add_form = '';
 $errors = [];
 $error_class = 'form__input--error';
@@ -48,7 +38,7 @@ if (!empty($_POST)) {
                 'project' => $_POST['project'],
                 'is_done' => false,
                 ];
-            if (isset($_FILES) && is_uploaded_file($_FILES['task_file']['tmp_name'])) {
+            if (!empty($_FILES) && is_uploaded_file($_FILES['task_file']['tmp_name'])) {
                 move_uploaded_file($_FILES['task_file']['tmp_name'], $_FILES['task_file']['name']);
                 $new_task['task_file'] = $_FILES['task_file']['name'];
             }
@@ -75,6 +65,16 @@ if (isset($_GET['task_add']) || isset($_GET['project_add']) || !empty($errors)) 
     );
 }
 
+$tasks_to_show = $tasks;
+
+if (!empty($_GET['project_id'])) {
+    if (array_key_exists($_GET['project_id'], $project_list)) {
+        $tasks_to_show = tasks_by_project($tasks, $project_list[$_GET['project_id']]);
+    } else {
+        http_response_code(404);
+    }
+}
+
 $content = render_template(
     'templates/index.php',
     [
@@ -99,10 +99,5 @@ $page_layout = render_template(
 );
 
 print($page_layout);
-
-echo '<pre>';
-var_dump($errors);
-var_dump($_POST);
-echo '</pre>';
 
 ?>

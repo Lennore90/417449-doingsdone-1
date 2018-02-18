@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body <?=((!empty($_GET) || !empty($errors)) && !isset($_GET['project_id'])) ? 'class="overlay"' : '' ?> >
+<body <?=!empty($add_form) ? 'class="overlay"' : '' ?> >
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
