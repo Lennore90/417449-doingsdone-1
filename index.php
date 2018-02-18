@@ -100,4 +100,5 @@ $page_layout = render_template(
 
 print($page_layout);
 
+var_dump($new_task);
 ?>
