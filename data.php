@@ -9,6 +9,7 @@ $tasks = [
         'deadline' => "01.06.2018",
         'project' => "Работа",
         'is_done' => false,
+        'task_file' => 'Резюме.doc',
     ],
     [
         'title' => "Выполнить тестовое задание",

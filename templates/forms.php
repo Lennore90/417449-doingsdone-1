@@ -62,7 +62,7 @@
         <label class="form__label" for="project_name">Название <sup>*</sup></label>
 
         <input class="form__input <?=!empty($errors) && in_array('name', $errors['project_add']) ? $error_class : '' ?>" type="text" name="name" id="project_name" value="" placeholder="Введите название проекта">
-        <<?=!empty($errors) && in_array('name', $errors['project_add']) ? $error_message : ''?>
+        <?=!empty($errors) && in_array('name', $errors['project_add']) ? $error_message : ''?>
       </div>
       <input type='hidden' name='action' value='project_add'>
 
