@@ -4,7 +4,7 @@
 
     <h2 class="modal__heading">Добавление задачи</h2>
 
-    <form class="form"  action="index.php" method="post">
+    <form class="form" enctype="multipart/form-data" action="index.php" method="post">
       <div class="form__row">
         <label class="form__label" for="name">Название <sup>*</sup></label>
 
@@ -34,8 +34,7 @@
         <label class="form__label" for="preview">Файл</label>
 
         <div class="form__input-file">
-          <input type="hidden" name="MAX_FILE_SIZE" value="30000">
-          <input class="visually-hidden" type="file" name="task_file" enctype="multipart/form-data" id="task_file" value="">
+          <input class="visually-hidden" type="file" name="task_file" id="task_file" value="">
 
           <label class="button button--transparent" for="task_file">
               <span>Выберите файл</span>
