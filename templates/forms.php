@@ -45,7 +45,7 @@
       <input type='hidden' name='action' value='task_add'>
 
       <div class="form__row form__row--controls">
-        <input class="button" type="submit" name="" value="Добавить">
+        <a href='index.php'> <input class="button" type="submit" name="" value="Добавить"></a>
       </div>
     </form>
   </div>

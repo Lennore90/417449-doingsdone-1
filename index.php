@@ -1,7 +1,13 @@
 <?php
 
+date_default_timezone_set('Europe/Moscow');
+
 // показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
+$show_complete_tasks = $_COOKIE['show_completed'] ?? 0; 
+if (isset($_GET['show_completed'])) { 
+    $show_complete_tasks = !$show_complete_tasks; 
+    setcookie('show_completed', $show_complete_tasks, strtotime("+7 days"), '/'); 
+}
 
 require_once('functions.php');
 require_once('data.php');
