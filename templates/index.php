@@ -32,8 +32,12 @@
                         <span class="checkbox__text"><?=($task['title'])?></span>
                     </label>
                 </td>
+                <td class="task__file">
+                    <? if (!empty($task['task_file'])): ?>
+                        <a class="download-link" href="#"><?=$task['task_file']?></a>
+                    <? endif; ?>
+                </td>
                 <td class="task__date"><?=$task['deadline']?></td>
-
                 <td class="task__controls">
                 </td>
             </tr>

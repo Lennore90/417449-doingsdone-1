@@ -40,7 +40,7 @@ if (!empty($_POST)) {
             $new_task = 
                 [
                 'title' => $_POST['name'],
-                'deadline' => $_POST['date'],
+                'deadline' => date('d.m.Y',strtotime($_POST['date'])),
                 'project' => $_POST['project'],
                 'is_done' => false,
                 ];
@@ -106,4 +106,5 @@ $page_layout = render_template(
 
 print($page_layout);
 
+var_dump($new_task);
 ?>
