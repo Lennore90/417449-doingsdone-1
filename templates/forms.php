@@ -50,7 +50,7 @@
     </form>
   </div>
 
-<? elseif (isset($_GET['project_add'])|| !empty($errors['project_add'])): ?>
+<? elseif (isset($_GET['project_add']) || !empty($errors['project_add'])): ?>
   <div class="modal">
     <a href="/index.php"><button class="modal__close" type="button" name="button">Закрыть</button></a>
 
@@ -67,6 +67,42 @@
 
       <div class="form__row form__row--controls">
         <input class="button" type="submit" name="" value="Добавить">
+      </div>
+    </form>
+  </div>
+<? elseif (isset($_GET['login']) || !empty($errors['login'])): ?>
+  <div class="modal">
+    <a href="/index.php"><button class="modal__close" type="button" name="button">Закрыть</button></a>
+
+    <h2 class="modal__heading">Вход на сайт</h2>
+
+    <form class="form"  action="index.php" method="post">
+      <div class="form__row">
+        <label class="form__label" for="email">E-mail<sup>*</sup></label>
+
+        <input class="form__input <?=!empty($errors) && in_array('email', $errors['login']) ? $error_class : '' ?>" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
+        <? if (!empty($errors)) {
+            if (empty($_POST['email'])) {
+              echo $error_message;
+            } elseif (!filter_var($_POST['email'] , FILTER_VALIDATE_EMAIL)) {
+              echo '<p class="form__message">E-mail не корректен</p>';
+            } elseif (!in_array($_POST['email'],$users)) {
+              echo '<p class="form__message">Пользователь не найден</p>';
+            }
+          }
+        ?>
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="password">Пароль<sup>*</sup></label>
+
+        <input class="form__input <?=!empty($errors) && in_array('password', $errors['login']) ? $error_class : '' ?>" type="text" name="password" id="password" value="" placeholder="Введите пароль">
+        <?=!empty($errors) && empty($_POST['password']) ? $error_message : ''?>
+        <?=!empty($user) && password_verify($_POST['password'],$user['password']) ? '<p class="form__message">Неверный пароль</p>' : ''?>
+      </div>
+      <input type='hidden' name='action' value='login'>
+
+      <div class="form__row form__row--controls">
+        <input class="button" type="submit" name="" value="Войти">
       </div>
     </form>
   </div>

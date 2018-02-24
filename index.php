@@ -1,16 +1,18 @@
 <?php
 
+session_start();
+date_default_timezone_set('Europe/Moscow');
+
+// показывать или нет выполненные задачи
 $show_complete_tasks = $_COOKIE['show_completed'] ?? 0; 
 if (isset($_GET['show_completed'])) { 
-$show_complete_tasks = !$show_complete_tasks; 
-setcookie('show_completed', $show_complete_tasks, strtotime("+7 days"), '/'); 
+    $show_complete_tasks = !$show_complete_tasks; 
+    setcookie('show_completed', $show_complete_tasks, strtotime("+7 days"), '/'); 
 } 
-
-date_default_timezone_set('Europe/Moscow');
-// показывать или нет выполненные задачи
 
 require_once('functions.php');
 require_once('data.php');
+require_once('userdata.php');
 
 $add_form = '';
 $errors = [];
@@ -19,7 +21,22 @@ $error_message = '<p class="form__message">Заполните это поле</p
 $required_fields = [
     'task_add' => ['name','project'],
     'project_add' => ['name'],
+    'login' => ['email', 'password'],
 ];
+
+if (isset($_GET['task_add']) || isset($_GET['project_add']) || isset($_GET['login']) || !empty($errors)) {
+    $add_form = render_template(
+        'templates/forms.php',
+        [
+            'errors' => $errors,
+            'project_list' => $project_list,
+            'error_class' => $error_class,
+            'error_message' => $error_message,
+            'users' => $users,
+            'user' => $user ?? '',
+        ]
+    );
+}
 
 if (!empty($_POST)) {
     $form = $_POST['action'];
@@ -31,17 +48,38 @@ if (!empty($_POST)) {
             if ($field == 'project' && !in_array($_POST['project'], $project_list)) {
                 $errors[$form][] = $field;
             }
+            if ($field == 'email' && !filter_var($_POST['email'] , FILTER_VALIDATE_EMAIL)) {
+                $errors[$form][] = $field;
+            } 
         }
     }
 
     if (empty($errors[$form])) {
         $errors = [];
+        if ($form == 'login') {
+            $user = search_user($_POST['email'],$users);
+            if (!in_array($_POST['email'],$user)) {
+                $errors[$form][] = $field;
+            }
+
+            if (!empty($user) && password_verify($_POST['password'],$user['password'])) {
+                $_SESSION['user'] = $user;
+                header("Location: /index.php" );
+            } else {
+                $errors['login'][] = 'password';
+            }
+        }
+
+        if ($form == 'project_add') {
+            $project_list[] = htmlspecialchars($_POST['name']);
+        }
+
         if ($form == 'task_add') {
             $new_task = 
                 [
-                'title' => $_POST['name'],
+                'title' => htmlspecialchars($_POST['name']),
                 'deadline' => date('d.m.Y',strtotime($_POST['date'])),
-                'project' => $_POST['project'],
+                'project' => htmlspecialchars($_POST['project']),
                 'is_done' => false,
                 ];
             if (!empty($_FILES) && is_uploaded_file($_FILES['task_file']['tmp_name'])) {
@@ -51,24 +89,7 @@ if (!empty($_POST)) {
             
             array_unshift($tasks, $new_task);
         }
-
-
-        if ($form == 'project_add') {
-            $project_list[] = $_POST['name'];
-        }
     }
-}
-
-if (isset($_GET['task_add']) || isset($_GET['project_add']) || !empty($errors)) {
-    $add_form = render_template(
-        'templates/forms.php',
-        [
-            'errors' => $errors,
-            'project_list' => $project_list,
-            'error_class' => $error_class,
-            'error_message' => $error_message,
-        ]
-    );
 }
 
 $tasks_to_show = $tasks;
@@ -81,14 +102,20 @@ if (!empty($_GET['project_id'])) {
     }
 }
 
-$content = render_template(
-    'templates/index.php',
-    [
-        'project_list' => $project_list,
-        'tasks' => $tasks_to_show ?? [],
-        'show_complete_tasks' => $show_complete_tasks,
-    ]
-);
+
+
+if (!empty($_SESSION['user'])) {
+    $content = render_template(
+        'templates/index.php',
+        [
+            'project_list' => $project_list,
+            'tasks' => $tasks_to_show ?? [],
+            'show_complete_tasks' => $show_complete_tasks,
+        ]
+    );
+} else {
+    $content = render_template('templates/guest.php', []);
+}
 
 $page_layout = render_template(
     'templates/layout.php',
@@ -106,5 +133,6 @@ $page_layout = render_template(
 
 print($page_layout);
 
-var_dump($new_task);
+var_dump($add_form);
+var_dump($errors);
 ?>
