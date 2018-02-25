@@ -53,7 +53,7 @@
 
 		                <a class="button button--transparent button--plus content__side-button" href="/?project_add">Добавить проект</a>
 		            </section>
-		            <main class="content__main"><?=$page_content;?></main>
+		            <main class="content__main"><?=$page_content?></main>
 		        </div>	            
 	        </div>
 		            
