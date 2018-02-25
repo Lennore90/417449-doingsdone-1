@@ -25,20 +25,6 @@ $required_fields = [
     'login' => ['email', 'password'],
 ];
 
-if (isset($_GET['task_add']) || isset($_GET['project_add']) || isset($_GET['login']) || !empty($errors)) {
-    $add_form = render_template(
-        'templates/forms.php',
-        [
-            'errors' => $errors,
-            'project_list' => $project_list,
-            'error_class' => $error_class,
-            'error_message' => $error_message,
-            'users' => $users,
-            'user' => $user ?? '',
-        ]
-    );
-}
-
 if (!empty($_POST)) {
     $form = $_POST['action'];
     $errors[$form] = [];
@@ -60,11 +46,11 @@ if (!empty($_POST)) {
         if ($form == 'login') {
             $user = search_user($_POST['email'],$users);
             if (!in_array($_POST['email'],$user)) {
-                $errors[$form][] = $field;
+                $errors['login'][] = 'email';
             }
 
             if (!empty($user) && password_verify($_POST['password'],$user['password'])) {
-                $_SESSION['user'] = $user;
+                $_SESSION['user_name'] = $user;
                 header("Location: /index.php" );
             } else {
                 $errors['login'][] = 'password';
@@ -92,6 +78,21 @@ if (!empty($_POST)) {
         }
     }
 }
+
+if (isset($_GET['task_add']) || isset($_GET['project_add']) || isset($_GET['login']) || !empty($errors)) {
+    $add_form = render_template(
+        'templates/forms.php',
+        [
+            'errors' => $errors,
+            'project_list' => $project_list,
+            'error_class' => $error_class,
+            'error_message' => $error_message,
+            'users' => $users,
+            'user' => $user ?? '',
+        ]
+    );
+}
+
 
 $tasks_to_show = $tasks;
 
@@ -134,6 +135,4 @@ $page_layout = render_template(
 
 print($page_layout);
 
-var_dump($add_form);
-var_dump($errors);
 ?>

@@ -61,8 +61,6 @@
 		                    </ul>
 		                </nav>
 
-		                <?=$add_form?>
-
 		                <a class="button button--transparent button--plus content__side-button" href="/?project_add">Добавить проект</a>
 		            </section>
 		            <main class="content__main"><?=$page_content;?></main>
@@ -80,6 +78,7 @@
 	        </div>
 
 	        <a class="main-footer__button button button--plus <?=!isset($_SESSION['user_name']) ? 'visually-hidden' : '' ?>" href="/?task_add">Добавить задачу</a>
+	        <?=$add_form?>
 
 	        <div class="main-footer__social social">
 	            <span class="visually-hidden">Мы в соцсетях:</span>
