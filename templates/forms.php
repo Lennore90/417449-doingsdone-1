@@ -81,16 +81,13 @@
         <label class="form__label" for="email">E-mail<sup>*</sup></label>
 
         <input class="form__input <?=!empty($errors) && in_array('email', $errors['login']) ? $error_class : '' ?>" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
-        <? if (!empty($errors['login']['email'])) : ?>
-          <?=empty($_POST['email']) ? $error_message : '<p class="form__message">E-mail не корректен</p>' ?>
-        <? endif; ?>
+        <?=array_key_exists('login',$errors) && in_array('email',$errors['login']) ? '<p class="form__message">Некорретный E-mail</p>' : '' ?>
       </div>
       <div class="form__row">
         <label class="form__label" for="password">Пароль<sup>*</sup></label>
 
         <input class="form__input <?=!empty($errors) && in_array('password', $errors['login']) ? $error_class : '' ?>" type="text" name="password" id="password" value="" placeholder="Введите пароль">
-        <?=!empty($errors) && empty($_POST['password']) ? $error_message : ''?>
-        <?=!empty($user) && password_verify($_POST['password'],$user['password']) ? '<p class="form__message">Неверный пароль</p>' : ''?>
+        <?=array_key_exists('login',$errors) && in_array('password',$errors['login']) ? '<p class="form__message">Неверный пароль</p>' : '' ?>
       </div>
       <input type='hidden' name='action' value='login'>
 

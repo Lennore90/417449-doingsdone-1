@@ -13,14 +13,12 @@
 	<h1 class="visually-hidden">Дела в порядке</h1>
 
 	<div class="page-wrapper">
-	    <div class="container container--with-sidebar">
-	        <header class="main-header">
-	            <a href="/index.php">
-	                <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
-	            </a>
-
-	            <? if (isset($_SESSION['user'])) : ?>
-
+	    <? if (isset($_SESSION['user'])) : ?>
+	    	<div class="container container--with-sidebar">
+	        	<header class="main-header">
+		            <a href="/index.php">
+		                <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
+		            </a>
 		            <div class="main-header__side">
 		                <a class="main-header__side-item button button--plus" href="/?task_add">Добавить задачу</a>
 
@@ -36,16 +34,8 @@
 		                    </div>
 		                </div>
 		            </div>
-		        <? else : ?>
-			        <div class="main-header__side">
-				    	<a class="main-header__side-item button button--transparent" href="/?login">Войти</a>
-				    </div>
-				<? endif; ?>
-			</header>
-
-			<? if (isset($_SESSION['user'])) : ?>
-
-		        <div class="content">
+				</header>
+				<div class="content">
 		            <section class="content__side">
 		                <h2 class="content__side-heading">Проекты</h2>
 
@@ -64,9 +54,36 @@
 		                <a class="button button--transparent button--plus content__side-button" href="/?project_add">Добавить проект</a>
 		            </section>
 		            <main class="content__main"><?=$page_content;?></main>
-		        </div>
-	        <? endif; ?>
-	    </div>
+		        </div>	            
+	        </div>
+		            
+        <? else : ?>
+	        <div class="container">
+		      	<header class="main-header">
+			        <a href="#">
+			          <img src="../img/logo.png" width="153" height="42" alt="Логитип Дела в порядке">
+			        </a>
+
+		        	<div class="main-header__side">
+		          		<a class="main-header__side-item button button--transparent" href="/?login">Войти</a>
+		        	</div>
+		      	</header>
+
+			    <div class="content">
+			        <section class="welcome">
+			          	<h2 class="welcome__heading">«Дела в порядке»</h2>
+
+			          	<div class="welcome__text">
+			            	<p>«Дела в порядке» — это веб приложение для удобного ведения списка дел. Сервис помогает пользователям не забывать о предстоящих важных событиях и задачах.</p>
+
+			            	<p>После создания аккаунта, пользователь может начать вносить свои дела, деля их по проектам и указывая сроки.</p>
+			          	</div>
+
+			          	<a class="welcome__button button" href="/?sign_up">Зарегистрироваться</a>
+			        </section>
+		      	</div>
+			</div>
+		<? endif; ?>
 	</div>
 
 	<footer class="main-footer">
