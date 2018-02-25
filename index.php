@@ -50,7 +50,7 @@ if (!empty($_POST)) {
             }
 
             if (!empty($user) && password_verify($_POST['password'],$user['password'])) {
-                $_SESSION['user_name'] = $user;
+                $_SESSION['user'] = $user;
                 header("Location: /index.php" );
             } else {
                 $errors['login'][] = 'password';
@@ -127,12 +127,12 @@ $page_layout = render_template(
         'show_complete_tasks' => $show_complete_tasks,
         'project_list' => $project_list ?? [],
         'tasks' => $tasks,
-        'user_name' => $user_name,
+        'user_name' => $_SESSION['user'] ?? '',
         'add_form' => $add_form,
         'errors' => $errors,
     ]
 );
 
 print($page_layout);
-
+var_dump($errors);
 ?>

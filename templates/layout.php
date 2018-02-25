@@ -19,7 +19,7 @@
 	                <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
 	            </a>
 
-	            <? if (isset($_SESSION['user_name'])) : ?>
+	            <? if (isset($_SESSION['user'])) : ?>
 
 		            <div class="main-header__side">
 		                <a class="main-header__side-item button button--plus" href="/?task_add">Добавить задачу</a>
@@ -30,9 +30,9 @@
 		                    </div>
 
 		                    <div class="user-menu__data">
-		                        <p><?=$user_name?></p>
+		                        <p><?=$user_name['name']?></p>
 
-		                        <a href="/?log_out">Выйти</a>
+		                        <a href="/logout.php">Выйти</a>
 		                    </div>
 		                </div>
 		            </div>
@@ -43,7 +43,7 @@
 				<? endif; ?>
 			</header>
 
-			<? if (isset($_SESSION['user_name'])) : ?>
+			<? if (isset($_SESSION['user'])) : ?>
 
 		        <div class="content">
 		            <section class="content__side">
@@ -77,7 +77,7 @@
 	            <p>Веб-приложение для удобного ведения списка дел.</p>
 	        </div>
 
-	        <a class="main-footer__button button button--plus <?=!isset($_SESSION['user_name']) ? 'visually-hidden' : '' ?>" href="/?task_add">Добавить задачу</a>
+	        <a class="main-footer__button button button--plus <?=!isset($_SESSION['user']) ? 'visually-hidden' : '' ?>" href="/?task_add">Добавить задачу</a>
 	        <?=$add_form?>
 
 	        <div class="main-footer__social social">
