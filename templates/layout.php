@@ -1,4 +1,3 @@
-<?php ?>
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -14,53 +13,77 @@
 	<h1 class="visually-hidden">Дела в порядке</h1>
 
 	<div class="page-wrapper">
-	    <div class="container container--with-sidebar">
-	        <header class="main-header">
-	            <a href="#">
-	                <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
-	            </a>
+	    <? if (isset($_SESSION['user'])) : ?>
+	    	<div class="container container--with-sidebar">
+	        	<header class="main-header">
+		            <a href="/index.php">
+		                <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
+		            </a>
+		            <div class="main-header__side">
+		                <a class="main-header__side-item button button--plus" href="/?task_add">Добавить задачу</a>
 
-	            <div class="main-header__side">
-	                <a class="main-header__side-item button button--plus" href="/?task_add">Добавить задачу</a>
+		                <div class="main-header__side-item user-menu">
+		                    <div class="user-menu__image">
+		                        <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
+		                    </div>
 
-	                <div class="main-header__side-item user-menu">
-	                    <div class="user-menu__image">
-	                        <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
-	                    </div>
+		                    <div class="user-menu__data">
+		                        <p><?=$user_name['name']?></p>
 
-	                    <div class="user-menu__data">
-	                        <p><?=$user_name?></p>
+		                        <a href="/logout.php">Выйти</a>
+		                    </div>
+		                </div>
+		            </div>
+				</header>
+				<div class="content">
+		            <section class="content__side">
+		                <h2 class="content__side-heading">Проекты</h2>
 
-	                        <a href="#">Выйти</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </header>
+		                <nav class="main-navigation">
+		                    <ul class="main-navigation__list">
+		                        <? $active_project = $_GET['project_id'] ?? 0; ?>
+		                    	<? foreach ($project_list as $id => $category): ?>
+		                            <li class="main-navigation__list-item <?=$id == $active_project ? 'main-navigation__list-item--active' : ''?>">
+		                                <a class="main-navigation__list-item-link" href="/?project_id=<?=$id?>"><?=$category?></a>
+		                                <span class="main-navigation__list-item-count"><?=task_count($tasks, $category, $show_complete_tasks)?></span>
+		                            </li>
+		                        <? endforeach; ?>
+		                    </ul>
+		                </nav>
 
-	        <div class="content">
-	            <section class="content__side">
-	                <h2 class="content__side-heading">Проекты</h2>
-
-	                <nav class="main-navigation">
-	                    <ul class="main-navigation__list">
-	                        
-	                    	<? $active_project = $_GET['project_id'] ?? 0; ?>
-	                    	<? foreach ($project_list as $id => $category): ?>
-	                            <li class="main-navigation__list-item <?=$id == $active_project ? 'main-navigation__list-item--active' : ''?>">
-	                                <a class="main-navigation__list-item-link" href="/?project_id=<?=$id?>"><?=$category?></a>
-	                                <span class="main-navigation__list-item-count"><?=task_count($tasks, $category, $show_complete_tasks)?></span>
-	                            </li>
-	                        <? endforeach; ?>
-	                    </ul>
-	                </nav>
-
-	                <?=$add_form?>
-
-	                <a class="button button--transparent button--plus content__side-button" href="/?project_add">Добавить проект</a>
-	            </section>
-	            <main class="content__main"><?=$page_content;?></main>
+		                <a class="button button--transparent button--plus content__side-button" href="/?project_add">Добавить проект</a>
+		            </section>
+		            <main class="content__main"><?=$page_content;?></main>
+		        </div>	            
 	        </div>
-	    </div>
+		            
+        <? else : ?>
+	        <div class="container">
+		      	<header class="main-header">
+			        <a href="#">
+			          <img src="../img/logo.png" width="153" height="42" alt="Логитип Дела в порядке">
+			        </a>
+
+		        	<div class="main-header__side">
+		          		<a class="main-header__side-item button button--transparent" href="/?login">Войти</a>
+		        	</div>
+		      	</header>
+
+			    <div class="content">
+			        <section class="welcome">
+			          	<h2 class="welcome__heading">«Дела в порядке»</h2>
+
+			          	<div class="welcome__text">
+			            	<p>«Дела в порядке» — это веб приложение для удобного ведения списка дел. Сервис помогает пользователям не забывать о предстоящих важных событиях и задачах.</p>
+
+			            	<p>После создания аккаунта, пользователь может начать вносить свои дела, деля их по проектам и указывая сроки.</p>
+			          	</div>
+
+			          	<a class="welcome__button button" href="/?sign_up">Зарегистрироваться</a>
+			        </section>
+		      	</div>
+			</div>
+		<? endif; ?>
 	</div>
 
 	<footer class="main-footer">
@@ -71,7 +94,8 @@
 	            <p>Веб-приложение для удобного ведения списка дел.</p>
 	        </div>
 
-	        <a class="main-footer__button button button--plus" href="/?task_add">Добавить задачу</a>
+	        <a class="main-footer__button button button--plus <?=!isset($_SESSION['user']) ? 'visually-hidden' : '' ?>" href="/?task_add">Добавить задачу</a>
+	        <?=$add_form?>
 
 	        <div class="main-footer__social social">
 	            <span class="visually-hidden">Мы в соцсетях:</span>

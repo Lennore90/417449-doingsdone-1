@@ -50,7 +50,7 @@
     </form>
   </div>
 
-<? elseif (isset($_GET['project_add'])|| !empty($errors['project_add'])): ?>
+<? elseif (isset($_GET['project_add']) || !empty($errors['project_add'])): ?>
   <div class="modal">
     <a href="/index.php"><button class="modal__close" type="button" name="button">Закрыть</button></a>
 
@@ -67,6 +67,32 @@
 
       <div class="form__row form__row--controls">
         <input class="button" type="submit" name="" value="Добавить">
+      </div>
+    </form>
+  </div>
+<? elseif (isset($_GET['login']) || !empty($errors['login'])): ?>
+  <div class="modal">
+    <a href="/index.php"><button class="modal__close" type="button" name="button">Закрыть</button></a>
+
+    <h2 class="modal__heading">Вход на сайт</h2>
+
+    <form class="form"  action="index.php" method="post">
+      <div class="form__row">
+        <label class="form__label" for="email">E-mail<sup>*</sup></label>
+
+        <input class="form__input <?=!empty($errors) && in_array('email', $errors['login']) ? $error_class : '' ?>" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
+        <?=array_key_exists('login',$errors) && in_array('email',$errors['login']) ? '<p class="form__message">Некорретный E-mail</p>' : '' ?>
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="password">Пароль<sup>*</sup></label>
+
+        <input class="form__input <?=!empty($errors) && in_array('password', $errors['login']) ? $error_class : '' ?>" type="text" name="password" id="password" value="" placeholder="Введите пароль">
+        <?=array_key_exists('login',$errors) && in_array('password',$errors['login']) ? '<p class="form__message">Неверный пароль</p>' : '' ?>
+      </div>
+      <input type='hidden' name='action' value='login'>
+
+      <div class="form__row form__row--controls">
+        <input class="button" type="submit" name="" value="Войти">
       </div>
     </form>
   </div>
