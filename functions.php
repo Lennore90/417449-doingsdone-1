@@ -53,4 +53,16 @@ function tasks_by_project($task_list, $project_name)
     return $result;
 }
 
+function search_user($email, $users)
+{
+    $result = [];
+    foreach ($users as $user) {
+        if (in_array($email, $user)) {
+            $result = $user;
+        }
+    }
+
+    return $result;
+}
+
 ?>
