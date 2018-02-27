@@ -3,16 +3,16 @@ USE doingsdone;
 CREATE TABLE users (
 	id INT AUTO_INCREMENT  PRIMARY KEY,
 	reg_date DATE,
-	email TEXT,
+	email CHAR(200),
 	name TEXT,
 	password TEXT,
-	contact_info TEXT,
+	contact_info TEXT
 );
 
 CREATE TABLE projects (
 	id INT AUTO_INCREMENT  PRIMARY KEY,
 	name TEXT,
-	user_id INT,
+	user_id INT
 );
 
 CREATE TABLE tasks (
@@ -23,7 +23,7 @@ CREATE TABLE tasks (
 	completed DATE,
 	file_link TEXT,
 	user_id INT,
-	project_id INT,
+	project_id INT
 );
 
 CREATE UNIQUE INDEX email ON users(email);
