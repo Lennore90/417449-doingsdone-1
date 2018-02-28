@@ -23,6 +23,7 @@ $required_fields = [
     'task_add' => ['name','project'],
     'project_add' => ['name'],
     'login' => ['email', 'password'],
+    'sign_up' => ['email', 'password','name']
 ];
 
 if (!empty($_POST)) {
@@ -57,6 +58,16 @@ if (!empty($_POST)) {
             }
         }
 
+        if ($form == 'sign_up') {
+            $new_user = [
+                'email' => ($_POST['email']),
+                'name' => htmlspecialchars($_POST['name']),
+                'password' => password_hash($_POST['password']),
+            ];
+            array_unshift($users, $new_user);
+                header("Location: /index.php" );
+        }
+
         if ($form == 'project_add') {
             $project_list[] = htmlspecialchars($_POST['name']);
         }
@@ -76,6 +87,8 @@ if (!empty($_POST)) {
             
             array_unshift($tasks, $new_task);
         }
+    } elseif (!empty($errors['sign_up'])) {
+        header("Location: /register.php/?error" );
     }
 }
 
@@ -93,6 +106,9 @@ if (isset($_GET['task_add']) || isset($_GET['project_add']) || isset($_GET['logi
     );
 }
 
+if (isset($_GET['sign_up'])) {
+    header("Location: /register.php" );
+}
 
 $tasks_to_show = $tasks;
 
