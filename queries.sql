@@ -1,8 +1,8 @@
 USE doingsdone;
 # Добавление аккаунтов пользователей
-INSERT INTO users SET email = 'ignat.v@gmail.com', contacts = 'ignat.v@gmail.com', name = 'Игнат', password = '$2y$10$OqvsKHQwr0Wk6FMZDoHo1uHoXd4UdxJG/5UDtUiie00XaxMHrW8ka', reg_date = '2017-02-20';
-INSERT INTO users SET email = 'kitty_93@li.ru', contacts = 'kitty_93@li.ru', name = 'Леночка', password = '$2y$10$bWtSjUhwgggtxrnJ7rxmIe63ABubHQs0AS0hgnOo41IEdMHkYoSVa', reg_date = '2018-01-01';
-INSERT INTO users SET email = 'warrior07@mail.ru', contacts = 'warrior07@mail.ru', name = 'Руслан', password = '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW', reg_date = '2017-12-11';
+INSERT INTO users SET email = 'ignat.v@gmail.com', contact_info = 'ignat.v@gmail.com', name = 'Игнат', password = '$2y$10$OqvsKHQwr0Wk6FMZDoHo1uHoXd4UdxJG/5UDtUiie00XaxMHrW8ka', reg_date = '2017-02-20';
+INSERT INTO users SET email = 'kitty_93@li.ru', contact_info = 'kitty_93@li.ru', name = 'Леночка', password = '$2y$10$bWtSjUhwgggtxrnJ7rxmIe63ABubHQs0AS0hgnOo41IEdMHkYoSVa', reg_date = '2018-01-01';
+INSERT INTO users SET email = 'warrior07@mail.ru', contact_info = 'warrior07@mail.ru', name = 'Руслан', password = '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW', reg_date = '2017-12-11';
 
 # Добавление проектов с привязкой к пользователям
 INSERT INTO projects SET name = 'Входящие', user_id = 1;
@@ -28,10 +28,10 @@ SELECT * FROM tasks WHERE user_id = 3;
 SELECT * FROM tasks WHERE project_id = 5;
 
 # Пометить задачу как выполненную
-UPDATE tasks SET completed = today WHERE id = 5;
+UPDATE tasks SET completed = CURDATE() WHERE id = 5;
 
 # Получить все задачи для завтрашнего дня
-SELECT name, user_id FROM tasks WHERE deadline = tomorrow ORDER BY user_id;
+SELECT name, user_id FROM tasks WHERE deadline = (CURDATE() + INTERVAL 1 DAY) ORDER BY user_id;
 
 # Обновить название задачи по ее идентификатору
 UPDATE tasks SET name = 'Заказать суши' WHERE id = 6;
