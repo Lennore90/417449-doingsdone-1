@@ -43,9 +43,11 @@ if (!empty($_POST)) {
 
     if (empty($errors[$form])) {
         $errors = [];
+        $con = mysqli_connect('doingsdone', 'root', '', 'doingsdone');
         if ($form == 'login') {
-            $user = search_user($_POST['email'],$users);
-            if (!in_array($_POST['email'],$user)) {
+            $safe_email =  mysqli_real_escape_string($con, $_POST['email']);
+            $user[] = "SELECT * FROM users WHERE email = $safe_email" ?? null;
+            if (empty($user)) {
                 $errors['login'][] = 'email';
             }
 

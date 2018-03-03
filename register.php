@@ -1,7 +1,8 @@
 <?php 
 
-require_once('userdata.php');
 require_once('functions.php');
+
+$con = mysqli_connect('doingsdone', 'root', '', 'doingsdone');
 
 $sign_up_errors = [];
 $error_class = 'form__input--error';
@@ -19,15 +20,13 @@ if (!empty($_POST)) {
   }
 
   if (empty($sign_up_errors)) {
-    $user_exist = search_user($_POST['email'], $users);
-    if (empty($user_exist)) {
+    $safe_email =  mysqli_real_escape_string($con, $_POST['email']);
+    $sql = "SELECT email FROM users WHERE email = $safe_email" ?? null;
+    if (empty($sql)) {
       header("Location: /index.php" );
-      $new_user = [
-        'email' => ($_POST['email']),
-        'name' => htmlspecialchars($_POST['name']),
-        'password' => password_hash($_POST['password']),
-      ];
-      array_unshift($users, $new_user);
+      $safe_pass = password_hash($_POST['password']);
+      $safe_name = mysqli_real_escape_string($con, $_POST['name']);
+      $sql = "INSERT INTO users SET email = $safe_email, contact_info = $safe_email, name = $safe_name, password = $safe_pass, reg_date = 'CURDATE'";
     } else {
       $sign_up_errors[] = 'email';
     }
@@ -143,6 +142,7 @@ if (!empty($_POST)) {
 </html>
 
 <? 
-var_dump($sign_up_errors);
+/*var_dump($sign_up_errors);
 var_dump($_POST);
+var_dump($con);*/
 ?>
