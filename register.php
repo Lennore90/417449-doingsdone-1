@@ -1,4 +1,40 @@
-<?php ?>
+<?php 
+
+require_once('userdata.php');
+require_once('functions.php');
+
+$sign_up_errors = [];
+$error_class = 'form__input--error';
+$sign_up_required_fields = ['email', 'password','name'];
+
+if (!empty($_POST)) {
+  foreach ($sign_up_required_fields as  $field) {
+    if (!array_key_exists($field, $_POST) || empty($_POST[$field])) {
+      $sign_up_errors[] = $field;
+    } else {      
+      if ($field == 'email' && !filter_var($_POST['email'] , FILTER_VALIDATE_EMAIL)) {
+          $sign_up_errors[] = $field;
+      } 
+    }
+  }
+
+  if (empty($sign_up_errors)) {
+    $user_exist = search_user($_POST['email'], $users);
+    if (empty($user_exist)) {
+      header("Location: /index.php" );
+      $new_user = [
+        'email' => ($_POST['email']),
+        'name' => htmlspecialchars($_POST['name']),
+        'password' => password_hash($_POST['password']),
+      ];
+      array_unshift($users, $new_user);
+    } else {
+      $sign_up_errors[] = 'email';
+    }
+  }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -30,32 +66,32 @@
         <main class="content__main">
           <h2 class="content__main-heading">Регистрация аккаунта</h2>
 
-          <form class="form" action="index.php" method="post">
+          <form class="form" action="register.php" method="post">
             <div class="form__row">
               <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-              <input class="form__input <?=$_GET['error'] && in_array('email', $errors['sign_up']) ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
-              <?=$_GET['error'] && in_array('email', $errors['sign_up']) ? '<p class="form__message">E-mail введён некорректно</p>' : '' ?>
+              <input class="form__input <?=!empty($_POST) && in_array('email', $sign_up_errors) ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
+              <?=!empty($_POST) && in_array('email', $sign_up_errors) ? '<p class="form__message">Введите корректный e-mail</p>' : '' ?>
             </div>
 
             <div class="form__row">
               <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
-              <input class="form__input <?=$_GET['error'] && in_array('password', $errors['sign_up']) ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
-              <?=$_GET['error'] && in_array('password', $errors['sign_up']) ? '<p class="form__message">Введите пароль</p>' : '' ?>
+              <input class="form__input <?=!empty($_POST) && in_array('password', $sign_up_errors) ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
+              <?=!empty($_POST) && in_array('password', $sign_up_errors) ? '<p class="form__message">Введите пароль</p>' : '' ?>
             </div>
 
             <div class="form__row">
               <label class="form__label" for="name">Имя <sup>*</sup></label>
 
-              <input class="form__input <?=$_GET['error'] && in_array('name', $errors['sign_up']) ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="" placeholder="Введите Ваше имя">
-              <?=$_GET['error'] ? '<p class="form__message">Как к Вам обращаться?</p>' : '' ?>
+              <input class="form__input <?=!empty($_POST) && in_array('name', $sign_up_errors) ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="" placeholder="Введите Ваше имя">
+              <?=!empty($_POST) && in_array('name', $sign_up_errors) ? '<p class="form__message">Как к Вам обращаться?</p>' : '' ?>
             </div>
 
             <input type='hidden' name='action' value='sign_up'>
 
             <div class="form__row form__row--controls">
-              <?=$_GET['error'] ? '<p class="error-message">Пожалуйста, исправьте ошибки в форме</p>' : '' ?>
+              <?=!empty($sign_up_errors) ? '<p class="error-message">Пожалуйста, исправьте ошибки в форме</p>' : '' ?>
 
               <input class="button" type="submit" name="" value="Зарегистрироваться">
             </div>
@@ -73,7 +109,7 @@
         <p>Веб-приложение для удобного ведения списка дел.</p>
       </div>
 
-      <a class="main-footer__button button button--plus">Добавить задачу</a>
+      <a class="main-footer__button button button--plus visually-hidden">Добавить задачу</a>
 
       <div class="main-footer__social social">
         <span class="visually-hidden">Мы в соцсетях:</span>
@@ -105,3 +141,8 @@
   </footer>
 </body>
 </html>
+
+<? 
+var_dump($sign_up_errors);
+var_dump($_POST);
+?>
