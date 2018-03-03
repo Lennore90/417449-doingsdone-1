@@ -11,7 +11,7 @@ if (isset($_GET['show_completed'])) {
     setcookie('show_completed', $show_complete_tasks, strtotime("+7 days"), '/'); 
 } 
 
-require_once('functions.php');
+require_once('init.php');
 require_once('data.php');
 require_once('userdata.php');
 
@@ -23,6 +23,7 @@ $required_fields = [
     'task_add' => ['name','project'],
     'project_add' => ['name'],
     'login' => ['email', 'password'],
+    'sign_up' => ['email', 'password','name']
 ];
 
 if (!empty($_POST)) {
@@ -43,10 +44,11 @@ if (!empty($_POST)) {
 
     if (empty($errors[$form])) {
         $errors = [];
-        $con = mysqli_connect('doingsdone', 'root', '', 'doingsdone');
+
         if ($form == 'login') {
-            $safe_email =  mysqli_real_escape_string($con, $_POST['email']);
-            $user[] = "SELECT * FROM users WHERE email = $safe_email" ?? null;
+
+            $user = search_user($db, $_POST['email']);
+
             if (empty($user)) {
                 $errors['login'][] = 'email';
             }
@@ -56,6 +58,32 @@ if (!empty($_POST)) {
                 header("Location: /index.php" );
             } else {
                 $errors['login'][] = 'password';
+            }
+        }
+        if ($form == 'sign_up') {
+            if (empty(search_user($db, $_POST['email']))) {
+      
+                $safe_pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                $safe_name = $_POST['name'];
+                $safe_email = $_POST['email'];
+
+                $sql = "INSERT INTO users (`name`, `email`, `password`, `contact_info`, `reg_date`) VALUES (?, ?, ?, ?, ?)";
+
+                $data = [
+                    $safe_name,
+                    $safe_email,
+                    $safe_pass,
+                    $safe_email,
+                    date('Y-m-d')
+                ];
+
+                $stmt = db_get_prepare_stmt($db, $sql, $data);
+
+                mysqli_stmt_execute($stmt);
+
+                header("Location: /index.php" );
+            } else {
+                $errors['sign_up'][] = 'email';
             }
         }
 
@@ -95,10 +123,6 @@ if (isset($_GET['task_add']) || isset($_GET['project_add']) || isset($_GET['logi
     );
 }
 
-if (isset($_GET['sign_up'])) {
-    header("Location: /register.php" );
-}
-
 $tasks_to_show = $tasks;
 
 if (!empty($_GET['project_id'])) {
@@ -120,6 +144,14 @@ if (!empty($_SESSION['user'])) {
             'show_complete_tasks' => $show_complete_tasks,
         ]
     );
+} elseif (isset($_GET['sign_up']) || !empty($errors['sign_up'])) {
+    $content = render_template(
+        'templates/register.php',
+        [
+            'errors' => $errors,
+            'error_class' => $error_class,
+        ]
+    );
 } else {
     $content = render_template('templates/guest.php', []);
 }
@@ -139,4 +171,5 @@ $page_layout = render_template(
 );
 
 print($page_layout);
+var_dump($errors);
 ?>

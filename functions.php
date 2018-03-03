@@ -53,16 +53,18 @@ function tasks_by_project($task_list, $project_name)
     return $result;
 }
 
-function search_user($email, $users)
+function search_user($db, $email)
 {
-    $result = [];
-    foreach ($users as $user) {
-        if (in_array($email, $user)) {
-            $result = $user;
-        }
+    $sql = "SELECT * FROM users WHERE email='".$email."'";
+    $result = mysqli_query($db, $sql);
+    
+    $user =  $result->fetch_assoc();
+
+    if (!$user) {
+        $user = false;
     }
 
-    return $result;
+    return $user;
 }
 
 ?>
