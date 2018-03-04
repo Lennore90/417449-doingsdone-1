@@ -17,7 +17,7 @@ CREATE TABLE projects (
 
 CREATE TABLE tasks (
 	id INT AUTO_INCREMENT  PRIMARY KEY,
-	name TEXT,
+	title TEXT,
 	assign_date DATE,
 	deadline DATE,
 	completed DATE,

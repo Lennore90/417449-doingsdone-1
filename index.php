@@ -12,8 +12,6 @@ if (isset($_GET['show_completed'])) {
 } 
 
 require_once('init.php');
-require_once('data.php');
-require_once('userdata.php');
 
 $add_form = '';
 $errors = [];
@@ -114,26 +112,11 @@ if (isset($_GET['task_add']) || isset($_GET['project_add']) || isset($_GET['logi
         'templates/forms.php',
         [
             'errors' => $errors,
-            'project_list' => $project_list,
             'error_class' => $error_class,
             'error_message' => $error_message,
-            'users' => $users,
-            'user' => $user ?? '',
         ]
     );
 }
-
-$tasks_to_show = $tasks;
-
-if (!empty($_GET['project_id'])) {
-    if (array_key_exists($_GET['project_id'], $project_list)) {
-        $tasks_to_show = tasks_by_project($tasks, $project_list[$_GET['project_id']]);
-    } else {
-        http_response_code(404);
-    }
-}
-
-
 
 if (!empty($_SESSION['user'])) {
     $content = render_template(
@@ -144,6 +127,46 @@ if (!empty($_SESSION['user'])) {
             'show_complete_tasks' => $show_complete_tasks,
         ]
     );
+
+    $sql = "SELECT * FROM projects JOIN users ON projects.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ";
+    $projects = mysqli_query($db, $sql);
+    while ($row = mysqli_fetch_array($projects)) {
+        $project_id = $row['id'];
+        $project_list[$project_id] = [
+            'name' => $row['name'],
+            'user_id' => $row['user_id'],
+        ];
+        var_dump($project_list);
+    }
+
+    $sql = "SELECT * FROM tasks JOIN users ON tasks.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ORDER BY assign_date";
+    $task_list = mysqli_query($db, $sql);
+
+    while ($row = mysqli_fetch_array($task_list)) {
+        $task_id = $row['id'];
+        $tasks[$task_id] = [
+            'title' => $row['title'],
+            'deadline' => $row['deadline'],
+            'project' => $row['project_id'],
+            'is_done' => false,
+        ];
+        if (!empty($row['completed'])) {
+            $task['is_done'] = true;
+        }
+        if (!empty($row['file_link'])) {
+            $task['task__file'] = $row['file_link'];
+        }
+    }
+
+    $tasks_to_show = $tasks;
+
+    if (!empty($_GET['project_id'])) {
+        if (array_key_exists($_GET['project_id'], $project_list)) {
+            $tasks_to_show = tasks_by_project($tasks, $project_list[$_GET['project_id']]);
+        } else {
+            http_response_code(404);
+        }
+    }
 } elseif (isset($_GET['sign_up']) || !empty($errors['sign_up'])) {
     $content = render_template(
         'templates/register.php',
@@ -171,5 +194,4 @@ $page_layout = render_template(
 );
 
 print($page_layout);
-var_dump($errors);
 ?>
