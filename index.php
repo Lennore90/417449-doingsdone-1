@@ -12,6 +12,7 @@ if (isset($_GET['show_completed'])) {
 } 
 
 require_once('init.php');
+require_once('data.php');
 
 $add_form = '';
 $errors = [];
@@ -128,7 +129,7 @@ if (!empty($_SESSION['user'])) {
         ]
     );
 
-    $sql = "SELECT * FROM projects JOIN users ON projects.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ";
+    $sql = "SELECT projects.id, projects.name FROM projects JOIN users ON projects.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ";
     $projects = mysqli_query($db, $sql);
     while ($row = mysqli_fetch_array($projects)) {
         $project_id = $row['id'];
