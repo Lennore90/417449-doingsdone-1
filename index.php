@@ -128,17 +128,9 @@ if (!empty($_SESSION['user'])) {
         ]
     );
 
-    $sql = "SELECT * FROM projects JOIN users ON projects.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ";
-    $projects = mysqli_query($db, $sql);
-    while ($row = mysqli_fetch_array($projects)) {
-        $project_id = $row['id'];
-        $project_list[$project_id] = [
-            'name' => $row['name'],
-            'user_id' => $row['user_id'],
-        ];
-        var_dump($project_list);
-    }
-
+    var_dump($sql = "SELECT projects.id, projects.name FROM projects JOIN users ON projects.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ");
+    $project_list = mysqli_query($db, $sql);
+    
     $sql = "SELECT * FROM tasks JOIN users ON tasks.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ORDER BY assign_date";
     $task_list = mysqli_query($db, $sql);
 
