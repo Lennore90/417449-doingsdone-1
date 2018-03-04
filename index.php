@@ -12,6 +12,7 @@ if (isset($_GET['show_completed'])) {
 } 
 
 require_once('init.php');
+require_once('data.php');
 
 $add_form = '';
 $errors = [];
