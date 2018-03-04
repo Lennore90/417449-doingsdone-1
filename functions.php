@@ -1,12 +1,12 @@
 <?php
 
-function task_count($task_array, $project_name, $show_complete_tasks)
+function task_count($task_array, $project_id, $show_complete_tasks)
 {
     $count=0;
     
     foreach ($task_array as $task) {
-        if ($show_complete_tasks == 1 || $task ['is_done'] == false) {
-            if ($task ['project'] == $project_name || $project_name == 'Все') {
+        if ($show_complete_tasks == 1 || empty($task['completed'])) {
+            if ($task ['project'] == $project_id || $project_id === 0) {
                 $count++;
             }
         }
@@ -40,11 +40,11 @@ function time_remains($date)
     return $result;
 }
 
-function tasks_by_project($task_list, $project_name)
+function tasks_by_project($task_list, $project_id)
 {
     $result = [];
     foreach ($task_list as $task) {
-        if ($task['project'] == $project_name) {
+        if ($task['project'] == $project_id) {
             $result[] = $task;
         }
 

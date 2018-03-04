@@ -24,20 +24,20 @@
 
 <table class="tasks">
     <? foreach ($tasks as $task):?>
-        <? if ($show_complete_tasks == 1 || $task['is_done'] == false):?>
-            <tr class="tasks__item task <?=$task['is_done'] === true ? 'task--completed' : ''?> <?=(!empty($task['deadline']) && $task['is_done'] == false && time_remains($task['deadline']) <= 1 ) ? 'task--important' :''?>">
+        <? if ($show_complete_tasks == 1 || empty($task['completed'])):?>
+            <tr class="tasks__item task <?=!empty($task['completed']) ? 'task--completed' : ''?> <?=(!empty($task['deadline']) && empty($task['completed']) && time_remains($task['deadline']) <= 1 ) ? 'task--important' :''?>">
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
-                        <input class="checkbox__input visually-hidden" type="checkbox" <?=$task['is_done'] === true ? 'checked' : ''?>>
+                        <input class="checkbox__input visually-hidden" type="checkbox" <?=!empty($task['completed'])? 'checked' : ''?>>
                         <span class="checkbox__text"><?=($task['title'])?></span>
                     </label>
                 </td>
                 <td class="task__file">
-                    <? if (!empty($task['task_file'])): ?>
-                        <a class="download-link" href="#"><?=$task['task_file']?></a>
+                    <? if (!empty($task['file_link'])): ?>
+                        <a class="download-link" href="#"><?=$task['file_link']?></a>
                     <? endif; ?>
                 </td>
-                <td class="task__date"><?=$task['deadline']?></td>
+                <td class="task__date"><?=date('d.m.Y', strtotime($task['deadline']))?></td>
                 <td class="task__controls">
                 </td>
             </tr>

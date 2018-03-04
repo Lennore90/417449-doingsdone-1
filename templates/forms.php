@@ -18,7 +18,7 @@
         <select class="form__input form__input--select <?=!empty($errors) && in_array('project', $errors['task_add']) ? $error_class : '' ?>" name="project" id="project">
           <option value="">--Выберите проект--</option>
           <? foreach ($project_list as $category):?>
-            <option value="<?=$category?>"><?=$category?></option>
+            <option value="<?=$category['id']?>"><?=$category['name']?></option>
           <? endforeach; ?>
         </select>
         <?=!empty($errors) && in_array('project', $errors['task_add']) ? $error_message : ''?>

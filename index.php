@@ -12,7 +12,6 @@ if (isset($_GET['show_completed'])) {
 } 
 
 require_once('init.php');
-require_once('data.php');
 
 $add_form = '';
 $errors = [];
@@ -108,18 +107,39 @@ if (!empty($_POST)) {
     }
 }
 
-if (isset($_GET['task_add']) || isset($_GET['project_add']) || isset($_GET['login']) || !empty($errors)) {
-    $add_form = render_template(
-        'templates/forms.php',
-        [
-            'errors' => $errors,
-            'error_class' => $error_class,
-            'error_message' => $error_message,
-        ]
-    );
-}
-
 if (!empty($_SESSION['user'])) {
+    $sql = "SELECT projects.id, projects.name FROM projects JOIN users ON projects.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ";
+    $projects = mysqli_query($db, $sql);
+    while ($row = mysqli_fetch_array($projects, MYSQLI_ASSOC)) {
+        $project_list[$row['id']] = $row['name'];
+    }
+
+    $sql = "SELECT tasks.* FROM tasks JOIN users ON tasks.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ORDER BY assign_date";
+    $task_list = mysqli_query($db, $sql);
+
+    while ($row = mysqli_fetch_array($task_list)) {
+        $task_id = $row['id'];
+        if ($show_complete_tasks == 1 || empty($task['completed'])) {
+            $tasks[$task_id] = [
+                'title' => $row['title'],
+                'deadline' => $row['deadline'],
+                'project' => $row['project_id'],
+                'completed' => $row['completed'],
+                'task__file' => $row['file_link'],
+            ];
+        }
+    }
+
+    $tasks_to_show = $tasks;
+
+    if (!empty($_GET['project_id'])) {
+        if (array_key_exists($_GET['project_id'], $project_list)) {
+            $tasks_to_show = tasks_by_project($tasks, $_GET['project_id']);
+        } else {
+            http_response_code(404);
+        }
+    }
+
     $content = render_template(
         'templates/index.php',
         [
@@ -129,45 +149,6 @@ if (!empty($_SESSION['user'])) {
         ]
     );
 
-    $sql = "SELECT projects.id, projects.name FROM projects JOIN users ON projects.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ";
-    $projects = mysqli_query($db, $sql);
-    while ($row = mysqli_fetch_array($projects)) {
-        $project_id = $row['id'];
-        $project_list[$project_id] = [
-            'name' => $row['name'],
-            'user_id' => $row['user_id'],
-        ];
-        var_dump($project_list);
-    }
-
-    $sql = "SELECT * FROM tasks JOIN users ON tasks.user_id=users.id WHERE users.name = '".$_SESSION['user']['name']." ' ORDER BY assign_date";
-    $task_list = mysqli_query($db, $sql);
-
-    while ($row = mysqli_fetch_array($task_list)) {
-        $task_id = $row['id'];
-        $tasks[$task_id] = [
-            'title' => $row['title'],
-            'deadline' => $row['deadline'],
-            'project' => $row['project_id'],
-            'is_done' => false,
-        ];
-        if (!empty($row['completed'])) {
-            $task['is_done'] = true;
-        }
-        if (!empty($row['file_link'])) {
-            $task['task__file'] = $row['file_link'];
-        }
-    }
-
-    $tasks_to_show = $tasks;
-
-    if (!empty($_GET['project_id'])) {
-        if (array_key_exists($_GET['project_id'], $project_list)) {
-            $tasks_to_show = tasks_by_project($tasks, $project_list[$_GET['project_id']]);
-        } else {
-            http_response_code(404);
-        }
-    }
 } elseif (isset($_GET['sign_up']) || !empty($errors['sign_up'])) {
     $content = render_template(
         'templates/register.php',
@@ -180,6 +161,18 @@ if (!empty($_SESSION['user'])) {
     $content = render_template('templates/guest.php', []);
 }
 
+if (isset($_GET['task_add']) || isset($_GET['project_add']) || isset($_GET['login']) || !empty($errors)) {
+    $add_form = render_template(
+        'templates/forms.php',
+        [
+            'errors' => $errors,
+            'error_class' => $error_class,
+            'error_message' => $error_message,
+            'project_list' => $project_list,
+        ]
+    );
+}
+
 $page_layout = render_template(
     'templates/layout.php',
     [
@@ -187,10 +180,11 @@ $page_layout = render_template(
         'page_content' => $content,
         'show_complete_tasks' => $show_complete_tasks,
         'project_list' => $project_list ?? [],
-        'tasks' => $tasks,
+        'tasks' => $tasks ?? null,
         'user_name' => $_SESSION['user'] ?? '',
         'add_form' => $add_form,
         'errors' => $errors,
+        'all_tasks_sum' => $all_tasks_sum ?? null,
     ]
 );
 

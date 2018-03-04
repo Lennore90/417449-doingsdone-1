@@ -42,10 +42,14 @@
 		                <nav class="main-navigation">
 		                    <ul class="main-navigation__list">
 		                        <? $active_project = $_GET['project_id'] ?? 0; ?>
-		                    	<? foreach ($project_list as $id => $category): ?>
+		                    	<li class="main-navigation__list-item <?=$active_project === 0 ? 'main-navigation__list-item--active' : ''?>">
+	                                <a class="main-navigation__list-item-link" href="/">Все</a>
+	                                <span class="main-navigation__list-item-count"><?=task_count($tasks, 0, $show_complete_tasks)?></span>
+	                            </li>
+		                    	<? foreach ($project_list as $id => $name): ?>
 		                            <li class="main-navigation__list-item <?=$id == $active_project ? 'main-navigation__list-item--active' : ''?>">
-		                                <a class="main-navigation__list-item-link" href="/?project_id=<?=$id?>"><?=$category?></a>
-		                                <span class="main-navigation__list-item-count"><?=task_count($tasks, $category, $show_complete_tasks)?></span>
+		                                <a class="main-navigation__list-item-link" href="/?project_id=<?=$id?>"><?=$name?></a>
+		                                <span class="main-navigation__list-item-count"><?=task_count($tasks, $id, $show_complete_tasks)?></span>
 		                            </li>
 		                        <? endforeach; ?>
 		                    </ul>
